@@ -1,5 +1,6 @@
 使用champ开源算法,实现宇树机器狗go2的ign-gazebo仿真
 ===
+分支 ign_robot_dog_Agibot 为智元机器狗仿真
 ## 使用方式
 - 配置环境变量
 ```
