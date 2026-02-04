@@ -119,10 +119,10 @@ def generate_launch_description():
 
             '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan', #单线激光雷达 
             '/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked', #多线激光雷达 
-            # '/depth_camera@sensor_msgs/msg/Image[gz.msgs.Image', #深度相机图像
-            # '/depth_camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked', #深度相机点云数据
-            # '/image_raw@sensor_msgs/msg/Image[gz.msgs.Image', #图像参数
-            # '/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',#相机参数
+            '/depth_camera@sensor_msgs/msg/Image[gz.msgs.Image', #深度相机图像
+            '/depth_camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked', #深度相机点云数据
+            '/image_raw@sensor_msgs/msg/Image[gz.msgs.Image', #图像参数
+            '/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',#相机参数
         ],
         # parameters=[{"qos_overrides./model/go2_dog.subscriber.reliability": "reliable"}],
         remappings=[
@@ -148,7 +148,7 @@ def generate_launch_description():
         name='static_laser_tf',
         arguments=[
             '--frame-id', 'front_camera',
-            '--child-frame-id', 'go2_dog/base_footprint/depth_camera',
+            '--child-frame-id', 'go2_dog/base/depth_camera',
             '--x', '0.0',
             '--y', '0.0',
             '--z', '0.0',
