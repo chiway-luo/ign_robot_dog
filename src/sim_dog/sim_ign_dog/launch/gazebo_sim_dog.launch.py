@@ -313,6 +313,31 @@ def generate_launch_description():
 
     ##################################3
 
+    # 点云数据转激光雷达数据
+    pointcloud_to_laserscan_node = Node(
+            package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
+            remappings=[
+                  ('cloud_in',  '/scan/points'),
+                  ('scan','/scan_real')
+            ],             
+            parameters=[{
+                'target_frame': 'radar',
+                'transform_tolerance': 0.01,
+                'min_height': 0.2,
+                'max_height': 1.0,
+                'angle_min': -3.1415926,
+                'angle_max': 3.1415926,
+                'angle_increment': 0.0030679616,
+                'scan_time': 0.05,
+                'range_min': 0.4,
+                'range_max': 10.0,
+                'use_inf': True,
+                'inf_epsilon': 1.0
+            }],
+            name='pointcloud_to_laserscan'
+        )
+    ld.add_action(pointcloud_to_laserscan_node)
+
     # 导航实现
     nav2_launch = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource(

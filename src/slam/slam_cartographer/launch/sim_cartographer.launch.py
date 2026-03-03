@@ -70,7 +70,10 @@ def generate_launch_description():
             '-configuration_directory',LaunchConfiguration('param_path'),
             #设置目录文件
             '-configuration_basename',LaunchConfiguration('param_name'),
-        ]
+        ],
+        # remappings=[
+        #     ('/scan','/scan_real'),
+        # ]
     )
     ld.add_action(cartographer_node)
 
@@ -82,7 +85,10 @@ def generate_launch_description():
         name='cartographer_occupancy_grid_node_sim',
         parameters=[
             {'use_sim_time': True}
-        ]
+        ],
+        # remappings=[
+        #     ('/scan','/scan_real'),
+        # ]
     )
     ld.add_action(cartographer_occupancy_grid_node)
 

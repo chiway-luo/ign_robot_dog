@@ -759,6 +759,16 @@
   <link name="front_camera">
   </link>
 
+  <link name="laser_up">
+  </link>
+  <joint name="laser_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.2" rpy="0.0 0.0 0.0"/>
+    <parent link="base"/>
+    <child link="laser_up"/>
+    <axis xyz="0.0 0.0 0.0"/>
+    <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+  </joint>
+
   <!-- 控制机器人运动 -->
   <!-- 运动插件1 生成joint_state_publisher 的插件 关节状态发布节点 -->
    <gazebo>
@@ -784,7 +794,7 @@
     </plugin>
   </gazebo>
   <!-- 雷达传感器 -->
-  <gazebo reference="radar"> <!-- 针对生效的link -->
+  <gazebo reference="laser_up"> <!-- 针对生效的link -->
     <sensor name='scan' type='gpu_lidar'>
       <topic>scan</topic> <!-- 单线 /scan 多线 /scan/points -->
       <update_rate>10</update_rate>
@@ -817,7 +827,7 @@
       </lidar>
       <alwaysOn>1</alwaysOn> <!-- 是否一直打开 -->
       <visualize>true</visualize> <!-- 是否可见 -->
-      <ignition_frame_id>radar</ignition_frame_id> <!-- 指定雷达消息使用的frame-id -->
+      <ignition_frame_id>laser_up</ignition_frame_id> <!-- 指定雷达消息使用的frame-id -->
     </sensor>
   </gazebo>
 
