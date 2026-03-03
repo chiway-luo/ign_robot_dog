@@ -87,7 +87,7 @@ def generate_launch_description():
     planner_server_node = Node(
         package='nav2_planner',
         executable='planner_server',
-        name='dog_planner_server',
+        name='planner_server',
         parameters=[
             LaunchConfiguration('planner_server_yaml'),
             LaunchConfiguration('global_costmap_yaml'),
@@ -100,7 +100,7 @@ def generate_launch_description():
     control_server_node = Node(
         package='nav2_controller',
         executable='controller_server',
-        name='dog_control_server',
+        name='controller_server',
         parameters=[
             LaunchConfiguration('control_server_yaml'),
             LaunchConfiguration('local_costmap_yaml'),
@@ -116,7 +116,7 @@ def generate_launch_description():
     smoother_server_node = Node(
         package='nav2_smoother',
         executable='smoother_server',
-        name='dog_smoother_server',
+        name='smoother_server',
         parameters=[
             LaunchConfiguration('smoother_server_yaml'),
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
@@ -128,7 +128,7 @@ def generate_launch_description():
     velocity_smmother_node = Node(
         package='nav2_velocity_smoother',
         executable='velocity_smoother',
-        name='dog_velocity_smoother',
+        name='velocity_smoother',
         parameters=[
             LaunchConfiguration('velocity_smmother_yaml'),
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
@@ -142,9 +142,9 @@ def generate_launch_description():
 
     # 启动恢复行为节点
     behavior_server_node = Node(
-        package='nav2_behavior',
+        package='nav2_behaviors',
         executable='behavior_server',
-        name='dog_behavior_server',
+        name='behavior_server',
         parameters=[
             LaunchConfiguration('behavior_server_yaml'),
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
@@ -156,7 +156,7 @@ def generate_launch_description():
     waypoint_follower_node = Node(
         package='nav2_waypoint_follower',
         executable='waypoint_follower',
-        name='dog_waypoint_follower',
+        name='waypoint_follower',
         parameters=[
             LaunchConfiguration('waypoint_follower_yaml'),
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
@@ -168,7 +168,7 @@ def generate_launch_description():
     bt_navigator_node = Node(
         package='nav2_bt_navigator',
         executable='bt_navigator',
-        name='dog_bt_navigator_node',
+        name='bt_navigator',
         parameters=[
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
             #自定义行为树
@@ -189,13 +189,13 @@ def generate_launch_description():
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
             {'autostart': True},
             {'node_names': [
-                'dog_planner_server', 
-                'dog_control_server', 
-                'dog_smoother_server', 
-                'dog_velocity_smoother', 
-                'dog_behavior_server',
-                'dog_waypoint_follower', 
-                'dog_bt_navigator_node']
+                'planner_server', 
+                'controller_server', 
+                'smoother_server', 
+                'velocity_smoother', 
+                'behavior_server',
+                'waypoint_follower', 
+                'bt_navigator']
             },
         ],
     )

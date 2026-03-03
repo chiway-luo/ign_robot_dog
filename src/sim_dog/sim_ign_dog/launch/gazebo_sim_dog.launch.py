@@ -136,7 +136,8 @@ def generate_launch_description():
     rviz2_node = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', os.path.join(this_package_path,'rviz','ign_dog.rviz')],
+        # arguments=['-d', os.path.join(this_package_path,'rviz','ign_dog.rviz')],
+        arguments=['-d', os.path.join(this_package_path,'rviz','nav2.rviz')],
         output='screen'
     )
     ld.add_action(rviz2_node)
@@ -309,6 +310,20 @@ def generate_launch_description():
         ]
     )
     ld.add_action(go2_base_footprint_to_base_tf)
+
+    ##################################3
+
+    # 导航实现
+    nav2_launch = IncludeLaunchDescription(
+        launch_description_source=PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('sim_navigation2'),
+                'launch',
+                'nav2_bringup.launch.py'
+            )
+        )
+    )
+    ld.add_action(nav2_launch)
 
     return ld
 
