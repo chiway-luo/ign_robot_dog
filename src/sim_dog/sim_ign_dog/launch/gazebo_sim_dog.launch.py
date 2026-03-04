@@ -41,8 +41,8 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # 启动顺序相关：通过延时/等待，避免 Gazebo/ros2_control 尚未就绪导致的偶发异常
-    ld.add_action(DeclareLaunchArgument('spawn_entity_delay', default_value='1.0'))
-    ld.add_action(DeclareLaunchArgument('controllers_delay', default_value='2.0'))
+    ld.add_action(DeclareLaunchArgument('spawn_entity_delay', default_value='2.0'))
+    ld.add_action(DeclareLaunchArgument('controllers_delay', default_value='4.0'))
     ld.add_action(DeclareLaunchArgument('champ_delay', default_value='1.0'))
     ld.add_action(DeclareLaunchArgument('controller_manager_timeout', default_value='60.0'))
     spawn_entity_delay = LaunchConfiguration('spawn_entity_delay')
