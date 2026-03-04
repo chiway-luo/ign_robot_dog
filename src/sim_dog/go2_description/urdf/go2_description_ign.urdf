@@ -881,8 +881,8 @@
           <!-- The plugin will read controller params from this YAML file -->
           <!-- Where to find the robot_description parameter -->
           <parameters>$(find sim_ign_dog)/config/go2_controllers.yaml</parameters>
-    <robot_param>robot_description</robot_param>
-    <robot_param_node>robot_state_publisher</robot_param_node>
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
   </plugin>
 </gazebo>
 

@@ -41,8 +41,8 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # 启动顺序相关：通过延时/等待，避免 Gazebo/ros2_control 尚未就绪导致的偶发异常
-    ld.add_action(DeclareLaunchArgument('spawn_entity_delay', default_value='2.0'))
-    ld.add_action(DeclareLaunchArgument('controllers_delay', default_value='4.0'))
+    ld.add_action(DeclareLaunchArgument('spawn_entity_delay', default_value='1.0'))
+    ld.add_action(DeclareLaunchArgument('controllers_delay', default_value='2.0'))
     ld.add_action(DeclareLaunchArgument('champ_delay', default_value='1.0'))
     ld.add_action(DeclareLaunchArgument('controller_manager_timeout', default_value='60.0'))
     spawn_entity_delay = LaunchConfiguration('spawn_entity_delay')
@@ -117,7 +117,7 @@ def generate_launch_description():
             '/model/go2_dog/odometry@nav_msgs/msg/Odometry[gz.msgs.Odometry', #里程计 GZ->ROS
             # '/model/go2_dog/pose@geometry_msgs/msg/TFMessage[gz.msgs.Pose_V', #位姿 GZ->ROS
 
-            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan', #单线激光雷达 
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan', #单线激光雷达 不桥接,有数据
             '/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked', #多线激光雷达 
             '/depth_camera@sensor_msgs/msg/Image[gz.msgs.Image', #深度相机图像
             '/depth_camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked', #深度相机点云数据
@@ -294,6 +294,25 @@ def generate_launch_description():
     )
     ld.add_action(go2_odom_to_odom_tf)
 
+    #发布base 到base_footprint的静态变换
+    static_base_base_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_base_base_tf',
+        arguments=[
+            '--frame-id', 'go2_dog/base',
+            '--child-frame-id', 'base',
+            '--x', '0.0',
+            '--y', '0.0',
+            '--z', '0.0',
+            '--roll', '0.0',
+            '--pitch', '0.0',
+            '--yaw', '0.0'
+        ]
+    )
+    # ld.add_action(static_base_base_tf)
+
+
     go2_base_footprint_to_base_tf = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -314,29 +333,29 @@ def generate_launch_description():
     ##################################3
 
     # 点云数据转激光雷达数据
-    pointcloud_to_laserscan_node = Node(
-            package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
-            remappings=[
-                  ('cloud_in',  '/scan/points'),
-                  ('scan','/scan_real')
-            ],             
-            parameters=[{
-                'target_frame': 'radar',
-                'transform_tolerance': 0.01,
-                'min_height': 0.2,
-                'max_height': 1.0,
-                'angle_min': -3.1415926,
-                'angle_max': 3.1415926,
-                'angle_increment': 0.0030679616,
-                'scan_time': 0.05,
-                'range_min': 0.4,
-                'range_max': 10.0,
-                'use_inf': True,
-                'inf_epsilon': 1.0
-            }],
-            name='pointcloud_to_laserscan'
-        )
-    ld.add_action(pointcloud_to_laserscan_node)
+    # pointcloud_to_laserscan_node = Node(
+    #         package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
+    #         remappings=[
+    #               ('cloud_in',  '/scan/points'),
+    #               ('scan','/scan')
+    #         ],             
+    #         parameters=[{
+    #             # 'target_frame': 'laser_up',
+    #             'transform_tolerance': 0.001, #tf变换容忍时间
+    #             'min_height': 0.0,
+    #             'max_height': 1.0, 
+    #             'angle_min': -3.1415926,
+    #             'angle_max': 3.1415926,
+    #             'angle_increment': 0.0030679616,
+    #             'scan_time': 0.02,
+    #             'range_min': 0.4,
+    #             'range_max': 20.0,
+    #             'use_inf': True, #是否使用inf表示无穷远
+    #             'inf_epsilon': 1.0
+    #         }],
+    #         name='pointcloud_to_laserscan'
+    #     )
+    # ld.add_action(pointcloud_to_laserscan_node)
 
     # 导航实现
     nav2_launch = IncludeLaunchDescription(

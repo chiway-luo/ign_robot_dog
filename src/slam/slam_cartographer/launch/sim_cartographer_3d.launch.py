@@ -52,7 +52,14 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             'param_name',
-            default_value='dog.lua',
+            default_value='dog_3d.lua',
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            'tf_buffer_duration',
+            default_value='30.0',
         )
     )
 
@@ -63,6 +70,7 @@ def generate_launch_description():
         name='cartographer_node_sim',
         parameters=[
             {'use_sim_time': True},
+            {'tf_buffer_duration': LaunchConfiguration('tf_buffer_duration')},
         ],
         #配置文件加载
         arguments=[
@@ -71,9 +79,10 @@ def generate_launch_description():
             #设置目录文件
             '-configuration_basename',LaunchConfiguration('param_name'),
         ],
-        # remappings=[
-        #     ('/scan','/scan_real'),
-        # ]
+        remappings=[
+            ('points2_1','/scan/points'),
+            ('points2','/scan/points'),
+        ]
     )
     ld.add_action(cartographer_node)
 
@@ -84,8 +93,10 @@ def generate_launch_description():
         executable='cartographer_occupancy_grid_node',
         name='cartographer_occupancy_grid_node_sim',
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': True},
+            # {'resolution': 0.05} #分辨率 一个像素/0.05m
         ],
+
     )
     ld.add_action(cartographer_occupancy_grid_node)
 

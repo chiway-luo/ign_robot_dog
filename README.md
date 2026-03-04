@@ -1,4 +1,4 @@
-使用champ开源算法,实现宇树机器狗go2的ign-gazebo仿真
+使用champ开源算法,实现宇树机器狗go2的ign-gazebo仿真和导航
 ===
 分支 ign_robot_dog_Agibot 为智元机器狗仿真
 ## 仿真参数说明
@@ -32,11 +32,11 @@ sudo nano ~/.bashrc
 export IGN_GAZEBO_RESOURCE_PATH=ign_models  #相对路径
 #export IGN_GAZEBO_RESOURCE_PATH=~/ign_models #绝对路径
 ```
-- ign_gazebo节点
+- ign_gazebo节点 + 导航节点
 ```
 ros2 launch sim_ign_dog gazebo_sim_dog.launch.py 
 ```
-- 控制节点
+- 控制节点(没必要启动)
 ```
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
