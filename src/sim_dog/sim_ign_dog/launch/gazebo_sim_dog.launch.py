@@ -35,7 +35,9 @@ from ament_index_python.packages import get_package_share_directory
 from launch.actions import TimerAction
 """
     在gazebo中加载自定义的仿真环境
-    并生成小车模型
+    并生成模型
+
+    启动导航文件(包含cartographer建图)
 """
 def generate_launch_description():
     ld = LaunchDescription()
@@ -142,7 +144,7 @@ def generate_launch_description():
     )
     ld.add_action(rviz2_node)
 
-    #因为 depth_camera/points 坐标系没发生改变 mycar_4w/base_footprint/depth_camera 发布static 坐标系变换与 camera
+    #因为 depth_camera/points 坐标系没发生改变 go2_dog/base/depth_camera 发布static 坐标系变换与 camera
     static_laser_tf = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -332,7 +334,7 @@ def generate_launch_description():
 
     ##################################3
 
-    # 点云数据转激光雷达数据
+    # 点云数据转激光雷达数据 不好用,有延迟导致建图不稳定,暂时不用
     # pointcloud_to_laserscan_node = Node(
     #         package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
     #         remappings=[
