@@ -29,7 +29,7 @@ sudo apt install ros-humble-velodyne
 sudo apt install ros-humble-velodyne-gazebo-plugins
 sudo apt-get install ros-humble-velodyne-description
 ```
-- 配置环境变量 (新版本取消了环境变量配置流程,写在了launch文件中)
+- 配置环境变量 (新版本取消了环境变量配置流程,写在了launch文件中，该步骤可以跳过)
 ```
 sudo nano ~/.bashrc
 ```
