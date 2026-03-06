@@ -25,9 +25,11 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         name="robot_state_publisher",
-        parameters=[{"robot_description": robot_description,
-                     "use_sim_time": True,
-                     }]
+        parameters=[
+            {"robot_description": robot_description},
+            {"use_sim_time": True},
+            {"publish_frequency": 200.0}
+        ]
     )
 
     #启动关节状态发布节点

@@ -35,19 +35,22 @@ from ament_index_python.packages import get_package_share_directory
 # from launch.substitutions import Command
 from launch.actions import TimerAction
 """
-    优化启动顺序后的launch文件
+    在gazebo中加载自定义的仿真环境
+    并生成模型
+
+    启动导航文件(包含cartographer建图)
 """
 def generate_launch_description():
     ld = LaunchDescription()
 
     # 启动顺序相关：通过延时/等待，避免 Gazebo/ros2_control 尚未就绪导致的偶发异常
     ld.add_action(DeclareLaunchArgument('spawn_entity_delay', default_value='2.0'))
+    ld.add_action(DeclareLaunchArgument('controllers_delay', default_value='4.0'))
     ld.add_action(DeclareLaunchArgument('champ_delay', default_value='1.0'))
-    ld.add_action(DeclareLaunchArgument('nav2_delay', default_value='5.0'))
     ld.add_action(DeclareLaunchArgument('controller_manager_timeout', default_value='60.0'))
     spawn_entity_delay = LaunchConfiguration('spawn_entity_delay')
+    controllers_delay = LaunchConfiguration('controllers_delay')
     champ_delay = LaunchConfiguration('champ_delay')
-    nav2_delay = LaunchConfiguration('nav2_delay')
     controller_manager_timeout = LaunchConfiguration('controller_manager_timeout')
 
     #获取ros_gz_sim功能包路径
@@ -80,7 +83,6 @@ def generate_launch_description():
             # 'gz_args': f"-v 4 -r {os.path.join(get_package_share_directory('demo_gazebo_sim'),'world','visualize_lidar.sdf')}"
         }.items()
     )
-    # SetEnvironmentVariable 是同步动作，add_action 后立即生效，无需等待
     ld.add_action(gazebo_visualize_node)
 
     #加载小车模型的launch文件
@@ -137,7 +139,7 @@ def generate_launch_description():
             # ('/model/go2_dog/pose', '/tf'),
         ]
     )
-    # ros_bridge_node 由 ros_gz_sim_node 退出后触发启动，不再立即启动
+    ld.add_action(ros_bridge_node)
 
     #启动rviz2
     rviz2_node = Node(
@@ -197,16 +199,6 @@ def generate_launch_description():
         output='screen',
     )
 
-    # ros2_gz_sim 退出后（模型生成完成）→ 启动 ros2_gz_bridge + jsb_spawner
-    ld.add_action(
-        RegisterEventHandler(
-            OnProcessExit(
-                target_action=ros_gz_sim_node,
-                on_exit=[ros_bridge_node, jsb_spawner],
-            )
-        )
-    )
-    # jsb_spawner 退出后 → 启动 legs_spawner
     ld.add_action(
         RegisterEventHandler(
             OnProcessExit(
@@ -215,6 +207,7 @@ def generate_launch_description():
             )
         )
     )
+    ld.add_action(TimerAction(period=controllers_delay, actions=[jsb_spawner]))
 
     #启动cham
     config_pkg_share = os.path.join(get_package_share_directory('go2_config'))
@@ -264,25 +257,11 @@ def generate_launch_description():
     )
     # CHAMP 依赖 /joint_states、/tf、以及控制器 action 接口等；提前启动可能触发偶发 exit code -11。
     # 因此把 CHAMP 的启动放到 controllers 加载完成之后。
-    # 导航依赖 champ_bringup 提供的 TF 和 odom，也放到 controllers 之后延迟启动。
-    nav2_launch = IncludeLaunchDescription(
-        launch_description_source=PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('sim_navigation2'),
-                'launch',
-                'nav2_bringup.launch.py'
-            )
-        )
-    )
-    # legs_spawner 退出后 → champ_bringup(延迟champ_delay) + nav2(延迟nav2_delay，等待champ就绪)
     ld.add_action(
         RegisterEventHandler(
             OnProcessExit(
                 target_action=legs_spawner,
-                on_exit=[
-                    TimerAction(period=champ_delay, actions=[cham_bringup_launch]),
-                    TimerAction(period=nav2_delay, actions=[nav2_launch]),
-                ],
+                on_exit=[TimerAction(period=champ_delay, actions=[cham_bringup_launch])],
             )
         )
     )
@@ -387,5 +366,46 @@ def generate_launch_description():
     #     )
     # ld.add_action(pointcloud_to_laserscan_node)
 
+    # 导航实现
+    nav2_launch = IncludeLaunchDescription(
+        launch_description_source=PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('sim_navigation2'),
+                'launch',
+                'nav2_bringup.launch.py'
+            )
+        )
+    )
+    ld.add_action(nav2_launch)
+
     return ld
 
+
+
+
+
+
+
+
+
+
+
+
+""" 
+
+    ros2 topic pub --once /legs_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{
+        joint_names: [
+            'FL_hip_joint','FL_thigh_joint','FL_calf_joint',
+            'FR_hip_joint','FR_thigh_joint','FR_calf_joint',
+            'RL_hip_joint','RL_thigh_joint','RL_calf_joint',
+            'RR_hip_joint','RR_thigh_joint','RR_calf_joint'
+        ],
+        points: [
+            {
+            positions: [0.2, 0.9, -1.6,  -0.2, 0.9, -1.6,   0.2, 0.9, -1.6,  -0.2, 0.9, -1.6],
+            time_from_start: {sec: 1, nanosec: 0}
+            }
+        ]
+        }"
+
+ """

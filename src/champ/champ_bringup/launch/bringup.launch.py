@@ -158,19 +158,19 @@ def generate_launch_description():
         "close_loop_odom", default_value="false", description=""
     )
 
-    description_ld = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("champ_description"),
-                "launch",
-                "description.launch.py",
-            )
-        ),
-        launch_arguments={
-            "use_sim_time": LaunchConfiguration("use_sim_time"),
-            "description_path": LaunchConfiguration("description_path"),
-        }.items(),
-    )
+    # description_ld = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         os.path.join(
+    #             get_package_share_directory("champ_description"),
+    #             "launch",
+    #             "description.launch.py",
+    #         )
+    #     ),
+    #     launch_arguments={
+    #         "use_sim_time": LaunchConfiguration("use_sim_time"),
+    #         "description_path": LaunchConfiguration("description_path"),
+    #     }.items(),
+    # )
 
     quadruped_controller_node = Node(
         package="champ_base",
@@ -279,7 +279,7 @@ def generate_launch_description():
             declare_use_base_to_footprint_ekf,
             declare_use_footprint_to_odom_ekf,
             declare_close_loop_odom,
-            description_ld,
+            # description_ld,
             quadruped_controller_node,
             state_estimator_node,
             base_to_footprint_ekf,
