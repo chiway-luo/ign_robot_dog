@@ -65,6 +65,9 @@ def generate_launch_description():
     # 相对路径(更稳定)
     ign_models_path = 'ign_models'
     ld.add_action(SetEnvironmentVariable('IGN_GAZEBO_RESOURCE_PATH', ign_models_path))
+    # 避免 ign-transport 多播发现时 "Network is unreachable" 报错
+    # 强制使用本地回环接口，无需真实网络
+    ld.add_action(SetEnvironmentVariable('IGN_IP', '127.0.0.1'))
 
     gazebo_visualize_node = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource(
@@ -130,10 +133,12 @@ def generate_launch_description():
             '/depth_camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked', #深度相机点云数据
             '/image_raw@sensor_msgs/msg/Image[gz.msgs.Image', #图像参数
             '/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',#相机参数
+            '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU', #IMU GZ->ROS
         ],
         # parameters=[{"qos_overrides./model/go2_dog.subscriber.reliability": "reliable"}],
         remappings=[
             ('/model/go2_dog/odometry', '/odom/ign'),
+            ('/imu', '/imu/data'), #重映射到 champ state_estimation 订阅的话题
             # ('/model/go2_dog/pose', '/tf'),
         ]
     )

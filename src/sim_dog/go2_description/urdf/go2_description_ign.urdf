@@ -726,13 +726,8 @@
     <axis xyz="0 0 0" />
   </joint>
   <link name="imu">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <mass value="0" />
-      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
-    </inertial>
   </link>
-  <joint name="imu_joint" type="fixed">
+  <joint name="imu_joint" type="fixed" dont_collapse="true">
     <origin xyz="-0.02557 0 0.04232" rpy="0 0 0" />
     <parent link="base" />
     <child link="imu" />
@@ -751,7 +746,7 @@
     <child link="radar" />
     <axis xyz="0 0 0" />
   </joint>
-  <joint name="front_camera_joint" type="fixed">
+  <joint name="front_camera_joint" type="fixed" dont_collapse="true">
     <origin rpy="0 0 0" xyz="0.32715 -0.00003 0.04297" />
       <parent link="base" />
       <child link="front_camera" />
@@ -761,7 +756,7 @@
 
   <link name="laser_up">
   </link>
-  <joint name="laser_joint" type="fixed">
+  <joint name="laser_joint" type="fixed" dont_collapse="true">
     <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/>
     <parent link="base"/>
     <child link="laser_up"/>
@@ -872,6 +867,18 @@
           <topic>/image_raw</topic>
           <ignition_frame_id>front_camera</ignition_frame_id>
         </sensor>
+  </gazebo>
+
+  <!-- IMU 传感器（Ignition Gazebo 格式），挂载于 imu link -->
+  <gazebo reference="imu">
+    <sensor name="imu_sensor" type="imu">
+      <topic>/imu</topic>
+      <update_rate>200</update_rate>
+      <imu/>
+      <alwaysOn>1</alwaysOn>
+      <visualize>true</visualize>
+      <ignition_frame_id>imu</ignition_frame_id>
+    </sensor>
   </gazebo>
 
   <gazebo>
