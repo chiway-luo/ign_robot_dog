@@ -51,7 +51,7 @@ def generate_launch_description():
         launch_description_source=PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory('slam_cartographer'), 
                         'launch', 
-                        'sim_cartographer.launch.py'
+                        'sim_cartographer_3d.launch.py'
         )),
     )
     ld.add_action(cartographer_launch)

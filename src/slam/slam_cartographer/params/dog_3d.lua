@@ -19,34 +19,37 @@ options = {
   map_builder = MAP_BUILDER,
   trajectory_builder = TRAJECTORY_BUILDER,
   map_frame = "map",
-  tracking_frame = "base",
+  tracking_frame = "imu",               -- 有IMU时设为IMU帧，提供最佳姿态估计
   published_frame = "odom",
-  odom_frame = "odom",
+  odom_frame = "carto_odom",            -- cartographer内部里程计帧
   provide_odom_frame = false,
-  publish_frame_projected_to_2d = false,
+  publish_frame_projected_to_2d = false, -- 3D模式不投影到2D平面
   use_pose_extrapolator = true,
-  use_odometry = false,
+  use_odometry = true,                   -- 启用里程计辅助定位
   use_nav_sat = false,
   use_landmarks = false,
-  num_laser_scans = 0,
+  num_laser_scans = 0,                   -- 不使用2D单线激光
   num_multi_echo_laser_scans = 0,
   num_subdivisions_per_laser_scan = 1,
-  num_point_clouds = 1,
-  lookup_transform_timeout_sec = 0.2,
+  num_point_clouds = 1,                  -- 使用1路3D点云 (/scan/points)
+  lookup_transform_timeout_sec = 0.5,
   submap_publish_period_sec = 0.3,
   pose_publish_period_sec = 5e-3,
   trajectory_publish_period_sec = 30e-3,
   rangefinder_sampling_ratio = 1.,
-  odometry_sampling_ratio = 1.,
+  odometry_sampling_ratio = 0.8,
   fixed_frame_pose_sampling_ratio = 1.,
   imu_sampling_ratio = 1.,
   landmarks_sampling_ratio = 1.,
 }
 
-TRAJECTORY_BUILDER_3D.num_accumulated_range_data = 160
-
 MAP_BUILDER.use_trajectory_builder_3d = true
 MAP_BUILDER.num_background_threads = 7
+
+TRAJECTORY_BUILDER_3D.num_accumulated_range_data = 1  -- 每帧点云立即处理，map帧尽快发布
+TRAJECTORY_BUILDER_3D.min_range = 0.15
+TRAJECTORY_BUILDER_3D.max_range = 20.0
+
 POSE_GRAPH.optimization_problem.huber_scale = 5e2
 POSE_GRAPH.optimize_every_n_nodes = 320
 POSE_GRAPH.constraint_builder.sampling_ratio = 0.03

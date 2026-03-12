@@ -82,6 +82,7 @@ def generate_launch_description():
         remappings=[
             ('points2_1','/scan/points'),
             ('points2','/scan/points'),
+            ('imu', '/imu/data'),   # cartographer默认订阅/imu，重映射到实际话题
         ]
     )
     ld.add_action(cartographer_node)
