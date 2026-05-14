@@ -1,0 +1,31 @@
+/**:
+  ros__parameters:
+    gait:
+      knee_orientation : ">>" #膝盖方向 ">>"表示向前 "<<"表示向后
+      pantograph_leg : false #是否为吊杆式腿
+      odom_scaler: 0.9 #里程计缩放系数
+      max_linear_velocity_x : 1.0 #最大线速度
+      max_linear_velocity_y : 1.0 #最大侧向线速度
+      max_angular_velocity_z : 1.0 #最大角速度
+      com_x_translation: 0.0 #质心x方向偏移
+      swing_height : 0.02 #摆动高度
+      stance_depth : 0.01 #着地点深度
+      stance_duration : 0.3 #支撑相持续时间
+      nominal_height : 0.225 #名义高度
+
+
+  #     /**:
+  # ros__parameters:
+  #   gait:
+  #     knee_orientation : ">>"
+  #     pantograph_leg : false
+  #     odom_scaler: 0.9
+  #     max_linear_velocity_x : 0.3
+  #     max_linear_velocity_y : 0.25
+  #     max_angular_velocity_z : 0.5
+  #     com_x_translation: 0.0
+  #     swing_height : 0.04
+  #     stance_depth : 0.01
+  #     stance_duration : 0.25
+  #     nominal_height : 0.225
+

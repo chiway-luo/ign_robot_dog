@@ -1,0 +1,22 @@
+/**:
+  ros__parameters:
+    joints_map:
+      left_front:
+        - FL_ABAD_JOINT
+        - FL_HIP_JOINT
+        - FL_KNEE_JOINT
+
+      right_front:
+        - FR_ABAD_JOINT
+        - FR_HIP_JOINT
+        - FR_KNEE_JOINT
+
+      left_hind:
+        - RL_ABAD_JOINT
+        - RL_HIP_JOINT
+        - RL_KNEE_JOINT
+
+      right_hind:
+        - RR_ABAD_JOINT
+        - RR_HIP_JOINT
+        - RR_KNEE_JOINT
