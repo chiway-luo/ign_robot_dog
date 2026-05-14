@@ -7,10 +7,13 @@
 ```bash
 export XF_APPID=你的app_id
 ```
-
+- 克隆桥接功能包
+```bash
+git clone https://github.com/chiway-luo/ros2_xf_bridge.git
+```
 
 ## 使用方式
-- 克隆本仓库
+- 克隆机器狗仿真仓库
 ```bash
 git clone https://github.com/chiway-luo/ign_robot_dog.git -b ***待定
 ```
