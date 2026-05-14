@@ -331,5 +331,13 @@ def generate_launch_description():
     )
     ld.add_action(nav2_launch)
 
+
+    # 启动语音控制节点
+    audio_control_node = Node(
+        package='audio_control',
+        executable='audio_control_simple',
+    )
+    ld.add_action(audio_control_node)
+
     return ld
 

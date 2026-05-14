@@ -1,6 +1,14 @@
 使用champ开源算法,实现智元机器狗d1的ign-gazebo仿真和语音识别导航
 ===
 该分支基于 [ign_robot_dog/ign_robot_dog_Agibot](https://github.com/chiway-luo/ign_robot_dog.git) 分支,实现了智元机器狗d1的ign-gazebo仿真和语音识别导航功能,并且集成了champ开源算法,实现了更为智能的导航功能
+## 配置讯飞语音应用id
+- 申请讯飞语音应用id,并获取到app_id
+- 修改.bashrc文件,添加环境变量
+```bash
+export XF_APPID=你的app_id
+```
+
+
 ## 使用方式
 - 克隆本仓库
 ```bash
@@ -18,17 +26,18 @@ sudo apt install ros-humble-velodyne-gazebo-plugins
 sudo apt-get install ros-humble-velodyne-description
 ```
 - ign_gazebo节点 + 导航(包含cartographer)
-```
+```bash
 ros2 launch sim_ign_dog d1_gazebo_sim_dog.launch.py 
 ```
 > 考虑到稳定性启动的问题,按依赖启动耗时较长(预计10s),请耐心等待;如启动失败请调节urdf中的激光雷达线束数量
 - [urdf 第1019行](src/sim_dog/edu_description/urdf/edu.urdf)
 
 
-- 控制节点(没必要,除非需要手动控制机器狗)
+- 语音控制节点
+```bash
+ros2 launch audio_control audio_control.launch.py
 ```
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-```
+
 ![](.docs/image.png)
 ## 参考仓库
 - [anujjain-dev/unitree-go2-ros2](https://github.com/anujjain-dev/unitree-go2-ros2.git)
