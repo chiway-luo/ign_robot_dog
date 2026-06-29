@@ -1,6 +1,7 @@
 使用champ开源算法,实现宇树机器狗go2的ign-gazebo仿真和导航
 ===
 分支 ign_robot_dog_Agibot 为智元机器狗仿真
+分支 ign_agibot_d1_SuZhouResearchInstituteUpperClothing 为加入苏研院定制上装效果(加入filter和3d_to_2d算法实现,并提供离线amcl实现)
 
 已经修改launch文件按照依赖顺序启动
 ## 版本说明
