@@ -1,3 +1,5 @@
+
+
 使用champ开源算法,实现宇树机器狗go2的ign-gazebo仿真和导航
 ===
 分支 ign_robot_dog_Agibot 为智元机器狗仿真
@@ -5,7 +7,7 @@
 
 已经修改launch文件按照依赖顺序启动
 ## 版本说明
-- ubantu 22.04
+- ubuntu 22.04
 - ROS2 Humble
 - ign_gazebo
 - rviz2
